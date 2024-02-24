@@ -1,59 +1,82 @@
 import { useState } from 'react'
 import './ExpenseForm.style.css'
 
-export const ExpenseForm = () => {
+// An alternative way how to handle the state:
+// const [userInput, setUserInput] = useState({
+//   enteredTitle: '',
+//   enteredAmount: '',
+//   enteredDate: '',
+// })
+
+// const titleChangeHandler = (event) => {
+//   // in case of using previous state (...prevState) it's necessary
+//   // to use callback in the state setter to provide an actual state
+//   // callback guarantee to provide the latest snapchot of the state
+//   setUserInput((prevState) => ({
+//     ...prevState,
+//     enteredTitle: event.target.value,
+//   }))
+// }
+
+// const amountChangeHandler = (event) => {
+//   setUserInput((prevState) => ({
+//     ...prevState,
+//     enteredAmount: event.target.value,
+//   }))
+// }
+
+// const dateChangeHandler = (event) => {
+//   setUserInput((prevState) => ({
+//     ...prevState,
+//     enteredDate: event.target.value,
+//   }))
+// }
+
+export const ExpenseForm = ({ onCancel, onSaveExpenceData }) => {
   const [enteredTitle, setEnteredTitle] = useState('')
   const [enteredAmount, setEnteredAmount] = useState('')
   const [enteredDate, setEnteredDate] = useState('')
 
-  const titleCangeHandler = (event) => {
+  const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value)
   }
 
-  const amountCangeHandler = (event) => {
+  const amountChangeHandler = (event) => {
     setEnteredAmount(event.target.value)
   }
 
-  const dateCangeHandler = (event) => {
+  const dateChangeHandler = (event) => {
     setEnteredDate(event.target.value)
   }
 
-  // const [userInput, setUserInput] = useState({
-  //   enteredTitle: '',
-  //   enteredAmount: '',
-  //   enteredDate: '',
-  // })
+  const handleSubmit = (event) => {
+    event.preventDefault()
 
-  // const titleCangeHandler = (event) => {
-  //   // in case of using previous state (...prevState) it's necessary 
-  //   // to use callback in the state setter to provide an actual state
-  //   // callback guarantee to provide the latest snapchot of the state
-  //   setUserInput((prevState) => ({
-  //     ...prevState,
-  //     enteredTitle: event.target.value,
-  //   }))
-  // }
+    if (enteredTitle && enteredAmount && enteredDate) {
+      const expenseData = {
+        title: enteredTitle,
+        price: enteredAmount,
+        date: new Date(enteredDate),
+      }
 
-  // const amountCangeHandler = (event) => {
-  //   setUserInput((prevState) => ({
-  //     ...prevState,
-  //     enteredAmount: event.target.value,
-  //   }))
-  // }
+      onSaveExpenceData(expenseData)
 
-  // const dateCangeHandler = (event) => {
-  //   setUserInput((prevState) => ({
-  //     ...prevState,
-  //     enteredDate: event.target.value,
-  //   }))
-  // }
+      setEnteredTitle('')
+      setEnteredAmount('')
+      setEnteredDate('')
+    }
+  }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
-          <input type="text" onChange={titleCangeHandler} />
+          <input
+            type="text"
+            onChange={titleChangeHandler}
+            value={enteredTitle}
+          />
         </div>
         <div className="new-expense__control">
           <label>Amount</label>
@@ -61,7 +84,8 @@ export const ExpenseForm = () => {
             type="number"
             min="0.01"
             step="0.01"
-            onChange={amountCangeHandler}
+            onChange={amountChangeHandler}
+            value={enteredAmount}
           />
         </div>
         <div className="new-expense__control">
@@ -70,11 +94,15 @@ export const ExpenseForm = () => {
             type="date"
             min="2020-01-01"
             max="2300-01-01"
-            onChange={dateCangeHandler}
+            onChange={dateChangeHandler}
+            value={enteredDate}
           />
         </div>
       </div>
       <div className="new-expense__actions">
+        <button onClick={onCancel} type="button">
+          Close
+        </button>
         <button type="submit">Add Expense</button>
       </div>
     </form>

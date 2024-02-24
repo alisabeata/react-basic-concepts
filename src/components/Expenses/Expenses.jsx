@@ -1,37 +1,30 @@
-import { ExpenseItem } from './ExpenseItem'
+import { useState } from 'react'
 import { Card } from '../Utils/Card'
-import { NewExpense } from '../NewExpense/NewExpense'
+import { ExpensesFilter } from './ExpensesFilter'
+import { ExpensesChart } from './ExpensesChart'
+import { ExpensesList } from './ExpensesList'
 
-const expenses = [
-  {
-    id: 'e1',
-    title: 'Star Ship',
-    price: 1095,
-    date: new Date(2020, 7, 14),
-  },
-  { id: 'e2', title: 'New Desk', price: 199, date: new Date(2021, 2, 12) },
-  {
-    id: 'e3',
-    title: 'Insurance',
-    price: 295,
-    date: new Date(2021, 2, 28),
-  },
-  {
-    id: 'e4',
-    title: 'A Mask',
-    price: 450,
-    date: new Date(2021, 5, 12),
-  },
-]
+export const Expenses = ({ expenses }) => {
+  const [filteredYear, setFilteredYear] = useState('')
 
-export const Expenses = () => {
+  const handleChangeFilter = (year) => {
+    setFilteredYear(year)
+  }
+
+  const filteredExpensesArr = expenses.filter((expense) => {
+    return filteredYear
+      ? expense.date.getFullYear().toString() === filteredYear
+      : true
+  })
+
+  console.log(filteredYear, filteredExpensesArr)
+
   return (
     <>
-      <NewExpense />
+      <ExpensesChart />
       <Card>
-        {expenses.map((cur, ind) => (
-          <ExpenseItem key={ind} item={cur} />
-        ))}
+        <ExpensesFilter onChangeFilter={handleChangeFilter} />
+        <ExpensesList expenses={filteredExpensesArr} />
       </Card>
     </>
   )
