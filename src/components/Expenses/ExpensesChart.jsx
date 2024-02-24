@@ -1,55 +1,61 @@
 import { Chart } from '../Chart/Chart'
 
-export const ExpensesChart = () => {
+export const ExpensesChart = ({ expenses }) => {
   const dataPoints = [
     {
       label: 'Jan',
-      value: 10,
+      value: 0,
     },
     {
       label: 'Feb',
-      value: 20,
+      value: 0,
     },
     {
       label: 'Mar',
-      value: 30,
+      value: 0,
     },
     {
       label: 'Apr',
-      value: 40,
+      value: 0,
     },
     {
       label: 'May',
-      value: 50,
+      value: 0,
     },
     {
       label: 'Jun',
-      value: 40,
+      value: 0,
     },
     {
       label: 'Jul',
-      value: 30,
+      value: 0,
     },
     {
       label: 'Aug',
-      value: 20,
+      value: 0,
     },
     {
       label: 'Sep',
-      value: 20,
+      value: 0,
     },
     {
       label: 'Oct',
-      value: 10,
+      value: 0,
     },
     {
       label: 'Nov',
-      value: 20,
+      value: 0,
     },
     {
       label: 'Dec',
-      value: 30,
+      value: 0,
     },
   ]
+
+  for (const expense of expenses) {
+    const expenseMonth = expense.date.getMonth() // Jan is 0, Feb is 1 ...
+    dataPoints[expenseMonth].value += expense.price
+  }
+
   return <Chart dataPoints={dataPoints} />
 }

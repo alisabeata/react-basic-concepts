@@ -5,23 +5,21 @@ import { ExpensesChart } from './ExpensesChart'
 import { ExpensesList } from './ExpensesList'
 
 export const Expenses = ({ expenses }) => {
-  const [filteredYear, setFilteredYear] = useState('')
+  const [filteredYear, setFilteredYear] = useState('2024')
 
   const handleChangeFilter = (year) => {
     setFilteredYear(year)
   }
 
   const filteredExpensesArr = expenses.filter((expense) => {
-    return filteredYear
-      ? expense.date.getFullYear().toString() === filteredYear
-      : true
+    return (
+      expense.date.getFullYear().toString() === filteredYear
+    )
   })
-
-  console.log(filteredYear, filteredExpensesArr)
 
   return (
     <>
-      <ExpensesChart />
+      <ExpensesChart expenses={filteredExpensesArr} />
       <Card>
         <ExpensesFilter onChangeFilter={handleChangeFilter} />
         <ExpensesList expenses={filteredExpensesArr} />
